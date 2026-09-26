@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import SignUp from './components/SignUp'
 type Product = { id: number; name: string; category: string; price: number; oldPrice?: number; image: string; badge?: string; sizes: string[] }
 type CartLine = { productId: number; size: string; quantity: number }
 type IconName = 'search' | 'bag' | 'heart' | 'arrow' | 'close' | 'plus' | 'minus'
@@ -73,6 +73,7 @@ function App() {
         {shown.length ? <div className="product-grid">{shown.map((product, index) => <article className="product-card" key={product.id} style={{ animationDelay: `${index * 45}ms` }}><div className="product-image"><img src={product.image} alt={product.name} loading="lazy" />{product.badge && <span className="product-badge">{product.badge}</span>}<button className={favorites.includes(product.id) ? 'heart-button selected' : 'heart-button'} type="button" aria-label={favorites.includes(product.id) ? 'পছন্দের তালিকা থেকে সরান' : 'পছন্দের তালিকায় রাখুন'} aria-pressed={favorites.includes(product.id)} onClick={() => toggleFavorite(product.id)}><Icon name="heart" size={18} /></button></div><div className="product-info"><div className="product-meta"><span>{product.category}</span><span className="rating">★ <b>৪.৮</b></span></div><h3>{product.name}</h3><div className="price-row"><strong>{money(product.price)}</strong>{product.oldPrice && <del>{money(product.oldPrice)}</del>}</div><div className="size-row"><label htmlFor={`size-${product.id}`}>সাইজ</label><select id={`size-${product.id}`} value={selectedSize(product)} onChange={(event) => setSizes((current) => ({ ...current, [product.id]: event.target.value }))}>{product.sizes.map((size) => <option key={size}>{size}</option>)}</select><span>Size guide</span></div><div className="product-actions"><button className="add-button" type="button" onClick={() => addToCart(product)}><Icon name="plus" size={14} /> কার্টে যোগ</button><button className="buy-button" type="button" onClick={() => buyNow(product)}>Buy now <Icon name="arrow" size={13} /></button></div></div></article>)}</div> : <div className="empty-results"><strong>এই নামে কোনো পণ্য নেই</strong><p>অন্যভাবে খুঁজে দেখুন অথবা সব পণ্য বেছে নিন।</p><button type="button" onClick={() => { setSearch(''); setCategory('সব পণ্য') }}>সব পণ্য দেখুন</button></div>}
         <div className="catalog-footer"><span>নিজের মতো করে পরো। প্রতিদিন।</span><span>PK STOR <i>·</i> DHAKA, BD</span></div>
       </section>
+      <SignUp />
     </main>
     <footer className="footer"><a className="brand" href="#home"><span className="brand-name">PK<span>.</span>STOR</span><span className="brand-caption">WEAR YOUR EVERYDAY</span></a><p>প্রতিদিনের পোশাক, তোমার নিজস্ব স্টাইলে।</p><a href="mailto:hello@pkstor.com">সাহায্য লাগবে? <b>hello@pkstor.com</b></a></footer>
 
