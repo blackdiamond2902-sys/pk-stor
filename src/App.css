@@ -259,4 +259,8 @@ body {
   border: none;
   font-size: 18px;
   cursor: pointer;
+}.brand-logo {
+  height: 55px;
+  width: auto;
+  object-fit: contain;
 }
