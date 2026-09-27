@@ -26,6 +26,8 @@ export const signInWithGoogle = async () => {
     return result.user;
   } catch (error) {
     console.error("Google Login Error:", error);
+    alert("লগইন ব্যর্থ হয়েছে! Firebase Console-এ Google Sign-in এনাবল করা আছে কিনা চেক করুন।");
+    return null;
   }
 };
 
