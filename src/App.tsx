@@ -16,7 +16,6 @@ const money = (amount: number) => `৳${amount.toLocaleString('en-US')}`
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('সব পণ্য')
-  const [cartCount, setCartCount] = useState(0)
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null)
 
   const shown = products.filter(p => selectedCategory === 'সব পণ্য' || p.category === selectedCategory)
@@ -85,7 +84,7 @@ export default function App() {
                 <h3>{product.name}</h3>
                 <p className="price-tag">{money(product.price)} {product.oldPrice && <del>{money(product.oldPrice)}</del>}</p>
                 <div className="btn-group">
-                  <button type="button" className="btn-secondary" onClick={() => setCartCount(c => c + 1)}>কার্টে যোগ</button>
+                  <button type="button" className="btn-secondary">কার্টে যোগ</button>
                   <button type="button" className="btn-primary" onClick={() => buyNow(product)}>Buy now →</button>
                 </div>
               </div>
