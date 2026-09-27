@@ -1,184 +1,122 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+import { useState } from 'react'
+import { signInWithGoogle, auth } from './firebase'
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+type Product = { id: number; name: string; category: string; price: number; oldPrice?: number; image: string; badge?: string }
+type CartLine = { productId: number; size: string; quantity: number }
+type IconName = 'search' | 'bag' | 'heart' | 'arrow' | 'close' | 'plus' | 'minus'
+
+const products: Product[] = [
+  { id: 1, name: 'এভরিডে কটন টি-শার্ট', category: 'টি-শার্ট', price: 790, oldPrice: 990, image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80', badge: 'বেস্টসেলার' },
+  { id: 2, name: 'গ্রাফিক স্টেটমেন্ট টি', category: 'টি-শার্ট', price: 950, image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80', badge: 'নতুন' },
+  { id: 3, name: 'ওভারসাইজড এসেনশিয়াল টি', category: 'টি-শার্ট', price: 890, oldPrice: 1090, image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80' },
+  { id: 4, name: 'সফট-টাচ ক্লাসিক পোলো', category: 'টি-শার্ট', price: 1190, image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=800&q=80' },
+  { id: 5, name: 'লিনেন ডেইলি ওভারশার্ট', category: 'শার্ট', price: 1490, oldPrice: 1790, image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80' },
+  { id: 6, name: 'রিল্যাক্সড ফিট অক্সফোর্ড', category: 'শার্ট', price: 1390, image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=800&q=80' },
+  { id: 7, name: 'উইকেন্ড ফ্লিস হুডি', category: 'হুডি', price: 1890, image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80' },
+  { id: 8, name: 'কোর ক্রু-নেক সোয়েটশার্ট', category: 'হুডি', price: 1690, oldPrice: 1990, image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=80' }
+]
+
+const categories = ['সব পণ্য', 'টি-শার্ট', 'শার্ট', 'হুডি']
+const money = (amount: number) => `৳${amount.toLocaleString('en-US')}`
+
+function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
+  const props = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8 }
+  if (name === 'search') return <svg {...props}><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4.2 4.2" /></svg>
+  if (name === 'bag') return <svg {...props}><path d="M5 8h14l1 12H4L5 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg>
+  if (name === 'heart') return <svg {...props}><path d="M20.4 8.7c0 4.2-8.4 10-8.4 10s-8.4-5.8-8.4-10a4.4 4.4 0 0 1 8.4-2.1 4.4 4.4 0 0 1 8.4 2.1Z" /></svg>
+  if (name === 'arrow') return <svg {...props}><path d="M4.5 12h14m-5.5-5.5 5.5 5.5-5.5 5.5" /></svg>
+  if (name === 'close') return <svg {...props}><path d="M18 6 6 18M6 6l12 12" /></svg>
+  if (name === 'plus') return <svg {...props}><path d="M12 5v14M5 12h14" /></svg>
+  return <svg {...props}><path d="M5 12h14" /></svg>
 }
 
-.hero {
-  position: relative;
+export default function App() {
+  const [selectedCategory, setSelectedCategory] = useState('সব পণ্য')
+  const [cart, setCart] = useState<CartLine[]>([])
+  const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null)
 
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
+  const shown = products.filter(p => selectedCategory === 'সব পণ্য' || p.category === selectedCategory)
 
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
+  const buyNow = async (product: Product) => {
+    if (!auth.currentUser) {
+      const user = await signInWithGoogle()
+      if (!user) return
     }
+    setCheckoutProduct(product)
   }
 
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
+  const addToCart = (productId: number) => {
+    setCart(prev => {
+      const idx = prev.findIndex(item => item.productId === productId)
+      if (idx >= 0) {
+        const next = [...prev]
+        next[idx] = { ...next[idx], quantity: next[idx].quantity + 1 }
+        return next
+      }
+      return [...prev, { productId, size: 'M', quantity: 1 }]
+    })
   }
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
+  return (
+    <div className="page-shell">
+      <header className="top-nav">
+        <div className="brand-logo">
+          <h1>ভালো ফিট, ভালো দিন।</h1>
+        </div>
+        <div className="cart-action">
+          <button className="icon-btn" type="button">
+            <Icon name="bag" />
+            <span className="badge-count">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+          </button>
+        </div>
+      </header>
 
-#docs {
-  border-right: 1px solid var(--border);
+      <main className="main-content">
+        <nav className="category-tabs">
+          {categories.map(c => (
+            <button key={c} className={`tab-item ${c === selectedCategory ? 'active' : ''}`} onClick={() => setSelectedCategory(c)}>
+              {c}
+            </button>
+          ))}
+        </nav>
 
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
+        <section className="product-grid">
+          {shown.map(product => (
+            <div key={product.id} className="product-card">
+              <div className="card-media">
+                <img src={product.image} alt={product.name} />
+                {product.badge && <span className="tag-badge">{product.badge}</span>}
+              </div>
+              <div className="card-details">
+                <h3>{product.name}</h3>
+                <p className="price-tag">{money(product.price)} {product.oldPrice && <del>{money(product.oldPrice)}</del>}</p>
+                <div className="btn-group">
+                  <button type="button" className="btn-secondary" onClick={() => addToCart(product.id)}>কার্টে যোগ</button>
+                  <button type="button" className="btn-primary" onClick={() => buyNow(product)}>Buy now →</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
+      </main>
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
+      {checkoutProduct && (
+        <div className="modal-backdrop" onClick={() => setCheckoutProduct(null)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h2>অর্ডারের তথ্য</h2>
+            <p>{checkoutProduct.name} - {money(checkoutProduct.price)}</p>
+            <form onSubmit={(e) => { e.preventDefault(); alert('অর্ডার সফল হয়েছে!'); setCheckoutProduct(null); }}>
+              <input type="text" placeholder="আপনার নাম" required />
+              <input type="text" placeholder="ফোন নম্বর" required />
+              <textarea placeholder="ডেলিভারি ঠিকানা" required></textarea>
+              <button type="submit" className="btn-primary">অর্ডার নিশ্চিত করুন</button>
+            </form>
+            <button type="button" className="close-icon" onClick={() => setCheckoutProduct(null)}>
+              <Icon name="close" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
