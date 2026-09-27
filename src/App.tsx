@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { signInWithGoogle, auth } from './firebase'
-
 type Product = { id: number; name: string; category: string; price: number; oldPrice?: number; image: string; badge?: string }
 type CartLine = { productId: number; size: string; quantity: number }
 type IconName = 'search' | 'bag' | 'heart' | 'arrow' | 'close' | 'plus' | 'minus'
