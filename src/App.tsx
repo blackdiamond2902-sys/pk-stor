@@ -30,19 +30,24 @@ export default function App() {
 
   return (
     <div className="page-shell">
-      {/* Top Navbar Header */}
+      {/* Header with Logo and Name */}
       <header className="site-header">
-        <div className="brand-title">PK STOR</div>
+        <div className="brand-wrap">
+          <div className="site-logo">PK</div>
+          <div className="name-location">
+            <div className="brand-title">PK STOR</div>
+            <div className="location-tag">DHAKA</div>
+          </div>
+        </div>
         <div className="header-right">
-          <span className="location-tag">DHAKA</span>
           <button className="cart-icon-btn" type="button">🛒 0</button>
         </div>
       </header>
 
-      {/* Hero Header Section */}
+      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-text">
-          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
+          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
           <p>প্রতিদিনের জন্য আরামদায়ক, নিজের মতো পোশাক। পছন্দের ফিট খুঁজে নাও PK STOR-এ।</p>
           <button className="hero-btn">কলেকশন ঘুরে দেখো →</button>
         </div>
@@ -67,7 +72,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Catalog Section */}
+      {/* Product List */}
       <main>
         <div className="section-header">
           <span className="sub-title">— THE EVERYDAY EDIT</span>
