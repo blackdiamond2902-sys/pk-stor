@@ -30,10 +30,19 @@ export default function App() {
 
   return (
     <div className="page-shell">
+      {/* Top Navbar Header */}
+      <header className="site-header">
+        <div className="brand-title">PK STOR</div>
+        <div className="header-right">
+          <span className="location-tag">DHAKA</span>
+          <button className="cart-icon-btn" type="button">🛒 0</button>
+        </div>
+      </header>
+
       {/* Hero Header Section */}
       <section className="hero-section">
         <div className="hero-text">
-          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
+          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
           <p>প্রতিদিনের জন্য আরামদায়ক, নিজের মতো পোশাক। পছন্দের ফিট খুঁজে নাও PK STOR-এ।</p>
           <button className="hero-btn">কলেকশন ঘুরে দেখো →</button>
         </div>
@@ -45,15 +54,15 @@ export default function App() {
       {/* Features Strip */}
       <div className="features-strip">
         <div className="feature-item">
-          <h4>01 আরামদায়ক কাপড়</h4>
+          <h4> আরামদায়ক কাপড়</h4>
           <p>প্রতিদিনের ব্যবহারের জন্য উপযোগী</p>
         </div>
         <div className="feature-item">
-          <h4>02 সহজ রিফান্ড পলিসি</h4>
+          <h4> সহজ রিফান্ড পলিসি</h4>
           <p>রিটানের দুশ্চিন্তা ছাড়া কেনাকাটা</p>
         </div>
         <div className="feature-item">
-          <h4>03 ক্যাশ অন ডেলিভারি</h4>
+          <h4> ক্যাশ অন ডেলিভারি</h4>
           <p>পণ্য হাতে পেয়ে পেমেন্ট</p>
         </div>
       </div>
