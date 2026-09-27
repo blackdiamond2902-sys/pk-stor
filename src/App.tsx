@@ -36,7 +36,7 @@ export default function App() {
     try {
       if (!auth.currentUser) {
         const user = await signInWithGoogle()
-        if (!user) return // কাস্টমার সাইন-ইন না করলে বা উইন্ডো কেটে দিলে ক্যাশআউট হবে না
+        if (!user) return 
       }
       setCheckoutProduct(product)
     } catch (error) {
@@ -47,11 +47,10 @@ export default function App() {
 
   return (
     <div className="page-shell">
-      {/* Header with Icon and Clean Title */}
+      {/* Header with PK STOR Logo */}
       <header className="site-header">
         <div className="brand-wrap">
-          <span className="brand-icon">🛍️</span>
-          <span className="brand-title">PK STOR</span>
+          <img src="/logo.png" alt="PK STOR Logo" className="brand-logo" />
         </div>
         <div className="header-right">
           <button className="cart-icon-btn" type="button">🛒 0</button>
@@ -73,15 +72,15 @@ export default function App() {
       {/* Features Strip */}
       <div className="features-strip">
         <div className="feature-item">
-          <h4> আরামদায়ক কাপড়</h4>
+          <h4>01 আরামদায়ক কাপড়</h4>
           <p>প্রতিদিনের ব্যবহারের জন্য উপযোগী</p>
         </div>
         <div className="feature-item">
-          <h4> সহজ রিফান্ড পলিসি</h4>
+          <h4>02 সহজ রিফান্ড পলিসি</h4>
           <p>রিটানের দুশ্চিন্তা ছাড়া কেনাকাটা</p>
         </div>
         <div className="feature-item">
-          <h4> ক্যাশ অন ডেলিভারি</h4>
+          <h4>03 ক্যাশ অন ডেলিভারি</h4>
           <p>পণ্য হাতে পেয়ে পেমেন্ট</p>
         </div>
       </div>
