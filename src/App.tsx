@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { signInWithGoogle, auth } from './firebase';
 import SignUp from './components/SignUp'
 type Product = { id: number; name: string; category: string; price: number; oldPrice?: number; image: string; badge?: string; sizes: string[] }
 type CartLine = { productId: number; size: string; quantity: number }
