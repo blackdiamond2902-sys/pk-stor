@@ -2,23 +2,34 @@ import { useState } from 'react'
 import { signInWithGoogle, auth } from './firebase'
 import './App.css'
 
-type Product = { id: number; name: string; category: string; price: number; oldPrice?: number; image: string; badge?: string }
+type Product = { 
+  id: number; 
+  name: string; 
+  gender: 'Men' | 'Women'; 
+  category: string; 
+  price: number; 
+  oldPrice?: number; 
+  image: string; 
+  badge?: string 
+}
 
 const products: Product[] = [
-  { id: 1, name: 'এভরিডে কটন টি-শার্ট', category: 'টি-শার্ট', price: 790, oldPrice: 990, image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80', badge: 'বেস্টসেলার' },
-  { id: 2, name: 'গ্রাফিক স্টেটমেন্ট টি', category: 'টি-শার্ট', price: 950, image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80', badge: 'নতুন' },
-  { id: 3, name: 'ওভারসাইজড এসেনশিয়াল টি', category: 'টি-শার্ট', price: 890, oldPrice: 1090, image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80' },
-  { id: 4, name: 'সফট-টাচ ক্লাসিক পোলো', category: 'টি-শার্ট', price: 1190, image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=800&q=80' }
+  // Men Collection
+  { id: 1, name: 'পুরুষদের কটন টি-শার্ট', gender: 'Men', category: 'টি-শার্ট', price: 790, oldPrice: 990, image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80', badge: 'বেস্টসেলার' },
+  { id: 2, name: 'পুরুষদের ক্লাসিক পোলো', gender: 'Men', category: 'পোলো', price: 1190, image: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=800&q=80' },
+  
+  // Women Collection
+  { id: 3, name: 'নারীদের ক্যাজুয়াল টপস', gender: 'Women', category: 'টপস', price: 950, image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80', badge: 'নতুন' },
+  { id: 4, name: 'নারীদের ওভারসাইজড টি-শার্ট', gender: 'Women', category: 'টি-শার্ট', price: 890, oldPrice: 1090, image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80' }
 ]
 
-const categories = ['সব পণ্য', 'টি-শার্ট', 'শার্ট', 'হুডি']
 const money = (amount: number) => `৳${amount.toLocaleString('en-US')}`
 
 export default function App() {
-  const [selectedCategory, setSelectedCategory] = useState('সব পণ্য')
+  const [selectedGender, setSelectedGender] = useState<'All' | 'Men' | 'Women'>('All')
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null)
 
-  const shown = products.filter(p => selectedCategory === 'সব পণ্য' || p.category === selectedCategory)
+  const shown = products.filter(p => selectedGender === 'All' || p.gender === selectedGender)
 
   const buyNow = async (product: Product) => {
     if (!auth.currentUser) {
@@ -30,7 +41,7 @@ export default function App() {
 
   return (
     <div className="page-shell">
-      {/* Header with Icon and Bold Name */}
+      {/* Header */}
       <header className="site-header">
         <div className="brand-wrap">
           <span className="brand-icon">🛍️</span>
@@ -44,8 +55,8 @@ export default function App() {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-text">
-          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
-          <p>প্রতিদিনের জন্য আরামদায়ক, নিজের মতো পোশাক। পছন্দের ফিট খুঁজে নাও PK STOR-এ।</p>
+          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
+          <p>ছেলে ও মেয়েদের প্রতিদিনের জন্য আরামদায়ক পোশাক। পছন্দের ফিট খুঁজে নাও PK STOR-এ।</p>
           <button className="hero-btn">কলেকশন ঘুরে দেখো →</button>
         </div>
         <div className="hero-image">
@@ -53,37 +64,36 @@ export default function App() {
         </div>
       </section>
 
-      {/* Features Strip */}
-      <div className="features-strip">
-        <div className="feature-item">
-          <h4>01 আরামদায়ক কাপড়</h4>
-          <p>প্রতিদিনের ব্যবহারের জন্য উপযোগী</p>
-        </div>
-        <div className="feature-item">
-          <h4>02 সহজ রিফান্ড পলিসি</h4>
-          <p>রিটানের দুশ্চিন্তা ছাড়া কেনাকাটা</p>
-        </div>
-        <div className="feature-item">
-          <h4>03 ক্যাশ অন ডেলিভারি</h4>
-          <p>পণ্য হাতে পেয়ে পেমেন্ট</p>
-        </div>
-      </div>
-
-      {/* Product List */}
+      {/* Product List with Male & Female Section Tabs */}
       <main>
         <div className="section-header">
-          <span className="sub-title">— THE EVERYDAY EDIT</span>
-          <h2 className="section-title">ভালো ফিট, ভালো দিন।</h2>
+          <span className="sub-title">— CATEGORIES</span>
+          <h2 className="section-title">পছন্দের বিভাগ বেছে নিন</h2>
         </div>
 
+        {/* Gender Filter Tabs */}
         <nav className="category-tabs">
-          {categories.map(c => (
-            <button key={c} className={`tab-item ${c === selectedCategory ? 'active' : ''}`} onClick={() => setSelectedCategory(c)}>
-              {c}
-            </button>
-          ))}
+          <button 
+            className={`tab-item ${selectedGender === 'All' ? 'active' : ''}`} 
+            onClick={() => setSelectedGender('All')}
+          >
+            সব পণ্য
+          </button>
+          <button 
+            className={`tab-item ${selectedGender === 'Men' ? 'active' : ''}`} 
+            onClick={() => setSelectedGender('Men')}
+          >
+            👨 Mens Collection
+          </button>
+          <button 
+            className={`tab-item ${selectedGender === 'Women' ? 'active' : ''}`} 
+            onClick={() => setSelectedGender('Women')}
+          >
+            👩 Womens Collection
+          </button>
         </nav>
 
+        {/* Product Grid */}
         <section className="product-grid">
           {shown.map(product => (
             <div key={product.id} className="product-card">
