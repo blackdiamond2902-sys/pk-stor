@@ -50,7 +50,9 @@ export default function App() {
       {/* Header with PK STOR Logo */}
       <header className="site-header">
         <div className="brand-wrap">
-          <img src="/logo.png" alt="PK STOR Logo" className="brand-logo" />
+         <a href="/" className="text-logo">
+  PK <span className="logo-accent">STOR</span>
+</a>
         </div>
         <div className="header-right">
           <button className="cart-icon-btn" type="button">🛒 0</button>
