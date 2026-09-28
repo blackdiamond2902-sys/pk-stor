@@ -1,3 +1,5 @@
+// @ts-ignore
+import { GlassMagnifier } from 'react-image-magnifiers';
 import { useState } from 'react'
 import { signInWithGoogle, auth } from './firebase'
 import './App.css'
@@ -67,7 +69,15 @@ export default function App() {
           <button className="hero-btn">কলেকশন ঘুরে দেখো →</button>
         </div>
         <div className="hero-image">
-          <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80" alt="Hero" />
+          <GlassMagnifier
+  imageSrc="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80"
+  imageAlt="Hero Product Image"
+  largeImageSrc="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80"
+  magnifierBorderSize={2}
+  magnifierBorderColor="rgba(255, 255, 255, 0.7)"
+  magnifierSize="45%"
+  square={false}
+/>
         </div>
       </section>
 
