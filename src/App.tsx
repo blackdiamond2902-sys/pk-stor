@@ -1,6 +1,7 @@
 // @ts-ignore
 import { GlassMagnifier } from 'react-image-magnifiers';
 import { useState } from 'react'
+import { ShoppingCart } from 'lucide-react'
 import { signInWithGoogle, auth } from './firebase'
 import './App.css'
 
@@ -30,8 +31,11 @@ const money = (amount: number) => `৳${amount.toLocaleString('en-US')}`
 export default function App() {
   const [selectedGender, setSelectedGender] = useState<'All' | 'Men' | 'Women'>('All')
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null)
+  const [cartCount, setCartCount] = useState(0)
 
   const shown = products.filter(p => selectedGender === 'All' || p.gender === selectedGender)
+
+  const addToCart = () => setCartCount(count => count + 1)
 
   // গুগল লগইন চেক করার লজিক
   const buyNow = async (product: Product) => {
@@ -57,7 +61,9 @@ export default function App() {
 </a>
         </div>
         <div className="header-right">
-          <button className="cart-icon-btn" type="button">🛒 0</button>
+          <button className="cart-icon-btn" type="button" aria-label={`Shopping cart, ${cartCount} items`}>
+            <ShoppingCart size={18} /> {cartCount}
+          </button>
         </div>
       </header>
 
@@ -99,51 +105,61 @@ export default function App() {
 
       {/* Main Catalog Section */}
       <main>
-        <div className="section-header">
-          <span className="sub-title">— CATEGORIES</span>
-          <h2 className="section-title">পছন্দের বিভাগ বেছে নিন</h2>
-        </div>
+        <section className="category-section">
+          <div className="section-header">
+            <span className="sub-title">— THE COLLECTION</span>
+            <h2 className="section-title">পছন্দের বিভাগ বেছে নিন</h2>
+          </div>
 
-        {/* Gender Category Tabs */}
-        <nav className="category-tabs">
-          <button 
-            className={`tab-item ${selectedGender === 'All' ? 'active' : ''}`} 
-            onClick={() => setSelectedGender('All')}
-          >
-            সব পণ্য
-          </button>
-          <button 
-            className={`tab-item ${selectedGender === 'Men' ? 'active' : ''}`} 
-            onClick={() => setSelectedGender('Men')}
-          >
-            👨 Mens Collection
-          </button>
-          <button 
-            className={`tab-item ${selectedGender === 'Women' ? 'active' : ''}`} 
-            onClick={() => setSelectedGender('Women')}
-          >
-            👩 Womens Collection
-          </button>
-        </nav>
+          <nav className="category-tabs" aria-label="Product categories">
+            <button
+              className={`tab-btn ${selectedGender === 'Women' ? 'active' : ''}`}
+              onClick={() => setSelectedGender('Women')}
+              type="button"
+            >
+              Women's Wear
+            </button>
+            <button
+              className={`tab-btn ${selectedGender === 'Men' ? 'active' : ''}`}
+              onClick={() => setSelectedGender('Men')}
+              type="button"
+            >
+              Men's Wear
+            </button>
+            <button
+              className={`tab-btn ${selectedGender === 'All' ? 'active' : ''}`}
+              onClick={() => setSelectedGender('All')}
+              type="button"
+            >
+              All Items
+            </button>
+          </nav>
 
-        {/* Product Grid */}
-        <section className="product-grid">
+          <div className="product-grid">
           {shown.map(product => (
             <div key={product.id} className="product-card">
               <div className="card-media">
                 <img src={product.image} alt={product.name} />
                 {product.badge && <span className="tag-badge">{product.badge}</span>}
+                {product.oldPrice && (
+                  <span className="discount-tag">
+                    {Math.round((1 - product.price / product.oldPrice) * 100)}% OFF
+                  </span>
+                )}
               </div>
               <div className="card-details">
                 <h3>{product.name}</h3>
                 <p className="price-tag">{money(product.price)} {product.oldPrice && <del>{money(product.oldPrice)}</del>}</p>
                 <div className="btn-group">
-                  <button type="button" className="btn-secondary">কার্টে যোগ</button>
+                  <button type="button" className="btn-secondary add-to-cart-btn" onClick={addToCart}>
+                    <ShoppingCart size={15} /> Add to Cart
+                  </button>
                   <button type="button" className="btn-primary" onClick={() => buyNow(product)}>Buy now →</button>
                 </div>
               </div>
             </div>
           ))}
+          </div>
         </section>
       </main>
 
