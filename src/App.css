@@ -259,14 +259,33 @@ body {
   border: none;
   font-size: 18px;
   cursor: pointer;
-}.brand-logo {
-  height: 55px;
-  width: auto;
-  object-fit: contain;
-}.brand-logo {
-  height: 55px;
-  width: auto;
-  object-fit: contain;
-  mask-image: linear-gradient(to right, transparent, black 40%);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 40%);
+}/* Ultra Classic & Large Text Logo */
+.text-logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 115px; /* আগের চেয়ে ৫ গুণ বড় করা হয়েছে */
+  font-weight: 700;
+  color: #1a1a1a;
+  text-decoration: none;
+  letter-spacing: 6px; /* ক্লাসিক লুকে অক্ষরের ফাঁক বাড়ানো হয়েছে */
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.text-logo:hover {
+  opacity: 0.85;
+}
+
+/* STOR সেকশনের ক্লাসিক রয়্যাল লুক */
+.logo-accent {
+  font-family: 'Cinzel', serif;
+  font-size: 95px; /* বড় ফন্টের সাথে সামঞ্জস্য রেখে */
+  font-weight: 600;
+  color: #2d4f3e;
+  border-left: 5px solid #2d4f3e;
+  padding-left: 18px;
+  font-style: italic; /* বাড়তি ক্লাসিক টাচ */
 }
