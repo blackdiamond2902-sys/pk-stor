@@ -31,6 +31,7 @@ export default function App() {
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null)
   const [cartCount, setCartCount] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
+  const [wishlistedProductIds, setWishlistedProductIds] = useState<number[]>([])
 
   const normalizedSearch = searchTerm.trim().toLowerCase()
   const shown = products.filter(product => {
@@ -40,6 +41,11 @@ export default function App() {
   })
 
   const addToCart = () => setCartCount(count => count + 1)
+  const toggleWishlist = (productId: number) => {
+    setWishlistedProductIds(current => current.includes(productId)
+      ? current.filter(id => id !== productId)
+      : [...current, productId])
+  }
 
   // গুগল লগইন চেক করার লজিক
   const buyNow = async (product: Product) => {
@@ -97,14 +103,8 @@ export default function App() {
 
       <section className="hero-section" aria-label="Featured fashion collection">
         <div className="hero-banner">
-          <div className="hero-photo hero-photo-one">
-            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=85" alt="Model wearing a contemporary fashion look" />
-          </div>
-          <div className="hero-photo hero-photo-two">
-            <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1000&q=85" alt="Model in a casual summer outfit" />
-          </div>
-          <div className="hero-photo hero-photo-three">
-            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=85" alt="Model in an elegant seasonal outfit" />
+          <div className="hero-photo">
+            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=2400&q=90" alt="Fashion model showcasing the new season collection" />
           </div>
           <div className="hero-copy">
             <span className="hero-kicker">THE NEW SEASON</span>
@@ -176,6 +176,15 @@ export default function App() {
             <div key={product.id} className="product-card">
               <div className="card-media">
                 <img src={product.image} alt={product.name} />
+                <button
+                  className={`wishlist-btn ${wishlistedProductIds.includes(product.id) ? 'is-wishlisted' : ''}`}
+                  type="button"
+                  aria-label={wishlistedProductIds.includes(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                  aria-pressed={wishlistedProductIds.includes(product.id)}
+                  onClick={() => toggleWishlist(product.id)}
+                >
+                  <Heart size={17} fill={wishlistedProductIds.includes(product.id) ? 'currentColor' : 'none'} />
+                </button>
                 {product.badge && <span className="tag-badge">{product.badge}</span>}
                 {product.oldPrice && (
                   <span className="discount-tag">
