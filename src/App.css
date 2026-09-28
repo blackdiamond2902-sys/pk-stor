@@ -180,11 +180,17 @@ body {
 }
 
 .hero-photo img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 100%;
   display: block;
   object-fit: cover;
   object-position: center 38%;
+  transform: translate(-50%, -50%);
   -webkit-mask-image: radial-gradient(ellipse at center, #000 57%, rgba(0, 0, 0, 0.92) 76%, transparent 105%);
   mask-image: radial-gradient(ellipse at center, #000 57%, rgba(0, 0, 0, 0.92) 76%, transparent 105%);
 }
@@ -546,35 +552,6 @@ body {
   border: none;
   font-size: 18px;
   cursor: pointer;
-}/* Ultra Classic & Large Text Logo */
-.text-logo {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 115px; /* আগের চেয়ে ৫ গুণ বড় করা হয়েছে */
-  font-weight: 700;
-  color: #1a1a1a;
-  text-decoration: none;
-  letter-spacing: 6px; /* ক্লাসিক লুকে অক্ষরের ফাঁক বাড়ানো হয়েছে */
-  display: inline-flex;
-  align-items: center;
-  gap: 15px;
-  text-transform: uppercase;
-  line-height: 1;
-  transition: all 0.3s ease;
-}
-
-.text-logo:hover {
-  opacity: 0.85;
-}
-
-/* STOR সেকশনের ক্লাসিক রয়্যাল লুক */
-.logo-accent {
-  font-family: 'Cinzel', serif;
-  font-size: 95px; /* বড় ফন্টের সাথে সামঞ্জস্য রেখে */
-  font-weight: 600;
-  color: #2d4f3e;
-  border-left: 5px solid #2d4f3e;
-  padding-left: 18px;
-  font-style: italic; /* বাড়তি ক্লাসিক টাচ */
 }
 
 /* Collection catalog */
