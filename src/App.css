@@ -263,4 +263,10 @@ body {
   height: 55px;
   width: auto;
   object-fit: contain;
+}.brand-logo {
+  height: 55px;
+  width: auto;
+  object-fit: contain;
+  mask-image: linear-gradient(to right, transparent, black 40%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 40%);
 }
