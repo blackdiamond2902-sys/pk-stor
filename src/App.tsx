@@ -1,7 +1,5 @@
-// @ts-ignore
-import { GlassMagnifier } from 'react-image-magnifiers';
 import { useState } from 'react'
-import { ShoppingCart } from 'lucide-react'
+import { Heart, Search, ShoppingCart, Smartphone, UserRound } from 'lucide-react'
 import { signInWithGoogle, auth } from './firebase'
 import './App.css'
 
@@ -32,8 +30,14 @@ export default function App() {
   const [selectedGender, setSelectedGender] = useState<'All' | 'Men' | 'Women'>('All')
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null)
   const [cartCount, setCartCount] = useState(0)
+  const [searchTerm, setSearchTerm] = useState('')
 
-  const shown = products.filter(p => selectedGender === 'All' || p.gender === selectedGender)
+  const normalizedSearch = searchTerm.trim().toLowerCase()
+  const shown = products.filter(product => {
+    const matchesGender = selectedGender === 'All' || product.gender === selectedGender
+    const matchesSearch = !normalizedSearch || `${product.name} ${product.category}`.toLowerCase().includes(normalizedSearch)
+    return matchesGender && matchesSearch
+  })
 
   const addToCart = () => setCartCount(count => count + 1)
 
@@ -53,37 +57,69 @@ export default function App() {
 
   return (
     <div className="page-shell">
-      {/* Header with PK STOR Logo */}
       <header className="site-header">
-        <div className="brand-wrap">
-         <a href="/" className="text-logo">
-  PK <span className="logo-accent">STOR</span>
-</a>
-        </div>
-        <div className="header-right">
-          <button className="cart-icon-btn" type="button" aria-label={`Shopping cart, ${cartCount} items`}>
-            <ShoppingCart size={18} /> {cartCount}
+        <a href="/" className="text-logo" aria-label="PK Stor home">
+          <span className="logo-monogram">PK</span>
+          <span>Stor</span>
+        </a>
+
+        <form className="header-search" role="search" onSubmit={event => event.preventDefault()}>
+          <label className="visually-hidden" htmlFor="store-search">Search products</label>
+          <input
+            id="store-search"
+            type="search"
+            placeholder="Search for fashion, styles and more"
+            value={searchTerm}
+            onChange={event => setSearchTerm(event.target.value)}
+          />
+          <button type="submit"><Search size={17} /> Search</button>
+        </form>
+
+        <nav className="header-utilities" aria-label="Store links">
+          <button className="utility-link" type="button" aria-label="Download App">
+            <Smartphone size={19} /><span>Download App</span>
           </button>
-        </div>
+          <button className="utility-link" type="button" aria-label="Wishlist">
+            <Heart size={19} /><span>Wishlist</span>
+          </button>
+          <button className="utility-link cart-link" type="button" aria-label={`Cart, ${cartCount} items`}>
+            <span className="cart-icon-wrap">
+              <ShoppingCart size={20} />
+              <span className="cart-count">{cartCount}</span>
+            </span>
+            <span>Cart</span>
+          </button>
+          <button className="utility-link" type="button" aria-label="Account">
+            <UserRound size={19} /><span>Account</span>
+          </button>
+        </nav>
       </header>
 
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-text">
-          <h1>তোমার স্টাইল।<br/>তোমার নিয়মে।</h1>
-          <p>প্রতিদিনের জন্য আরামদায়ক, নিজের মতো পোশাক। পছন্দের ফিট খুঁজে নাও PK STOR-এ।</p>
-          <button className="hero-btn">কলেকশন ঘুরে দেখো →</button>
+      <section className="hero-section" aria-label="Featured fashion collection">
+        <div className="hero-banner">
+          <div className="hero-photo hero-photo-one">
+            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=85" alt="Model wearing a contemporary fashion look" />
+          </div>
+          <div className="hero-photo hero-photo-two">
+            <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1000&q=85" alt="Model in a casual summer outfit" />
+          </div>
+          <div className="hero-photo hero-photo-three">
+            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=85" alt="Model in an elegant seasonal outfit" />
+          </div>
+          <div className="hero-copy">
+            <span className="hero-kicker">THE NEW SEASON</span>
+            <h1>তোমার স্টাইল।<br />তোমার নিয়মে।</h1>
+            <p>প্রতিদিনের ফ্যাশনে নিজের মতো করে সাজো।</p>
+            <a className="hero-btn" href="#collection">Shop the collection <span aria-hidden="true">→</span></a>
+          </div>
         </div>
-        <div className="hero-image">
-          <GlassMagnifier
-  imageSrc="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80"
-  imageAlt="Hero Product Image"
-  largeImageSrc="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80"
-  magnifierBorderSize={2}
-  magnifierBorderColor="rgba(255, 255, 255, 0.7)"
-  magnifierSize="45%"
-  square={false}
-/>
+
+        <div className="hero-category-bar">
+          <div>
+            <span>THIS SEASON'S EDIT</span>
+            <h2>Women Fashion Wear</h2>
+          </div>
+          <a href="#collection">Explore styles <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
@@ -104,7 +140,7 @@ export default function App() {
       </div>
 
       {/* Main Catalog Section */}
-      <main>
+      <main id="collection">
         <section className="category-section">
           <div className="section-header">
             <span className="sub-title">— THE COLLECTION</span>
